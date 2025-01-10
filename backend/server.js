@@ -1,9 +1,11 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+
 import authRoutes from "./routes/auth.routes.js";
 import messageRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/auth.routes.js";
+
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
 const app = express();
@@ -27,3 +29,5 @@ app.listen(PORT, () => {
     connectToMongoDB();
     console.log(`Server Running on port ${PORT}`)
 });
+
+//The reason we separate auth route + controller from user route + controller is that authentication is its own service & we want to keep our app structure clean

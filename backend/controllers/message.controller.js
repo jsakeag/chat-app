@@ -42,3 +42,25 @@ export const sendMessage = async (req, res) => {
 		res.status(500).json({ error: "Internal server error" });
 	}
 };
+
+export const getMessages = async (req, res) => {
+    try {
+        const {id:userToChatId} = req.params.id; //get req.params.id and rename to userToChatId
+        const senderId = req.user._id;
+
+        //conversation document, has array of mesage references as an attribute, use mongoose populate method to get actual contents of each message
+        const conversation = await Conversation.findOne({
+            participants: {$all: [senderId, userToChatId]},
+        }).populate("messages");
+
+        //if not messages, successful request but returned array will be empty
+        if (!conversation) return res.status(200).json([]);
+
+        const messages = conversation.messages;
+        res.status(200).json(messages);
+
+    } catch (error) {
+        console.log("Error in getMessage controller: ", error.message);
+		res.status(500).json({ error: "Internal server error" });
+    }
+}

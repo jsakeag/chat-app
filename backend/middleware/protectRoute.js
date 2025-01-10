@@ -26,6 +26,7 @@ const protectRoute = async (req, res, next) => {
 		}
 
         //assign request user attribute to the user we decoded using mongoose model + jwt
+        //because of this line of code, we can use req.user._id instead of req.user.Id
 		req.user = user;
 
         //this says that once everything has run, exit this function and call the next one
