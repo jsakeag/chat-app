@@ -16,6 +16,8 @@ dotenv.config();
 app.use(express.json()); // to parse the incoming requests with JSON payloads (from req.body)
 app.use(cookieParser()); //before running routes call the middleware so we can access cookies (see protectRoute.js)
 
+//all the different routes could be written here, but they would be disorganized
+//express's solution to this is middlewares - we can create separate controller or router objects in other files which contain their own controllers
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/users", userRoutes);
