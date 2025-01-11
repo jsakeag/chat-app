@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 
 const protectRoute = async (req, res, next) => {
     try {
+        //req params: cookies (has jwt), user (assigned at end)
         const token = req.cookies.jwt;
         //case where there is no token in the request
         if (!token) {
@@ -29,7 +30,7 @@ const protectRoute = async (req, res, next) => {
         //because of this line of code, we can use req.user._id instead of req.user.Id
 		req.user = user;
 
-        //this says that once everything has run, exit this function and call the next one
+        //this says that if everything has successfully ran by this point, exit this function and call the "next" function (passed as a parameter)
 		next();
     } catch (error) {
         console.log("Error in protectRoute middleware: ", error.message);
