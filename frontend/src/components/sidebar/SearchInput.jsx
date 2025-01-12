@@ -21,6 +21,7 @@ const SearchInput = () => {
     
     if (conversation) {
       setSelectedConversation(conversation)
+      setSearch('asd')
     } else toast.error("No such user found")
   };
   return (
