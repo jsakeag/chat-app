@@ -1,6 +1,6 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
-//import { getReceiverSocketId, io } from "../socket/socket.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
 	try {
@@ -33,14 +33,17 @@ export const sendMessage = async (req, res) => {
 			conversation.messages.push(newMessage._id);
 		}
 
-        // SOCKET IO FUNCTIONALITY WILL GO HERE
-
-		// await conversation.save();
-		// await newMessage.save();
-
 		// saves the message to db, access by going to MongoDB website > cluster > chat-app-db > conversations/messages
 		// the Promise.all() allows us to run conversation.save() and newMessage.save() in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
+
+		// socket.io functionality
+		// now that message in db, send to other user
+		const receiverSocketId = getReceiverSocketId(receiverId);
+		if (receiverSocketId) {
+			//io.to sends message to one specific client, not everyone
+			io.to(receiverSocketId).emit("newMessage", newMessage);
+		}
 
 		res.status(201).json(newMessage);
 	} catch (error) {
